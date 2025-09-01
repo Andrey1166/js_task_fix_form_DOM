@@ -1,29 +1,34 @@
 'use strict';
 
-const inputs = [...document.querySelectorAll('.field-text')];
+const forms = [...document.querySelectorAll('form')];
 
-function createLabel(item) {
-  const label = document.createElement('label');
-  const id = item.getAttribute('id');
-  const inputName = item.getAttribute('name');
-  let labelName = '';
+forms.forEach((form) => {
+  const inputs = [...form.querySelectorAll('.field-text')];
 
-  inputName.split('').forEach((char) => {
-    if (char === char.toUpperCase()) {
-      labelName += ' ' + char;
-    } else {
-      labelName += char;
+  inputs.forEach((item) => {
+    const label = document.createElement('label');
+    const id = item.getAttribute('id');
+    const inputName = item.getAttribute('name').replaceAll(/[-_]/g, ' ');
+    let labelName = '';
+
+    inputName.split('').forEach((char) => {
+      if (char === char.toUpperCase()) {
+        labelName += ' ' + char;
+      } else {
+        labelName += char;
+      }
+    });
+
+    labelName = labelName.charAt(0).toUpperCase() + labelName.slice(1);
+
+    if (!item.id) {
+      item.id = 'auto-id-' + new Date().toString();
     }
+
+    label.setAttribute('class', 'field-label');
+    label.setAttribute('for', id);
+    item.setAttribute('placeholder', labelName);
+    label.textContent = labelName;
+    item.parentElement.appendChild(label);
   });
-
-  const placeholderName =
-    labelName.charAt(0).toUpperCase() + labelName.slice(1);
-
-  label.setAttribute('class', 'field-label');
-  label.setAttribute('for', id);
-  item.setAttribute('placeholder', placeholderName);
-  label.textContent = labelName;
-  item.before(label);
-}
-
-inputs.forEach((input) => createLabel(input));
+});
