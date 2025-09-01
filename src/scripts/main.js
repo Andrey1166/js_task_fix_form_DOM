@@ -3,11 +3,10 @@
 const forms = [...document.querySelectorAll('form')];
 
 forms.forEach((form) => {
-  const inputs = [...form.querySelectorAll('.field-text')];
+  const inputs = [...form.querySelectorAll('input')];
 
   inputs.forEach((item) => {
     const label = document.createElement('label');
-    const id = item.getAttribute('id');
     const inputName = item.getAttribute('name').replaceAll(/[-_]/g, ' ');
     let labelName = '';
 
@@ -22,8 +21,10 @@ forms.forEach((form) => {
     labelName = labelName.charAt(0).toUpperCase() + labelName.slice(1);
 
     if (!item.id) {
-      item.id = 'auto-id-' + new Date().toString();
+      item.id = 'auto-id-' + labelName.toLowerCase().replaceAll(' ', '-');
     }
+
+    const id = item.getAttribute('id');
 
     label.setAttribute('class', 'field-label');
     label.setAttribute('for', id);
